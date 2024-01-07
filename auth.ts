@@ -1,10 +1,10 @@
-import NextAuth from "next-auth";
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import { UserRole } from "@prisma/client";
+import NextAuth from 'next-auth';
+import { PrismaAdapter } from '@auth/prisma-adapter';
+import { UserRole } from '@prisma/client';
 
-import authConfig from "@/auth.config";
-import { db } from "@/lib/db";
-import { getUserById } from "@/data/user";
+import authConfig from '@/auth.config';
+import { db } from '@/lib/db';
+import { getUserById } from '@/data/user';
 
 export const {
   handlers: { GET, POST },
@@ -13,8 +13,8 @@ export const {
   signOut,
 } = NextAuth({
   pages: {
-    signIn: "/auth/login",
-    error: "/auth/error",
+    signIn: '/auth/login',
+    error: '/auth/error',
   },
   events: {
     async linkAccount({ user }) {
@@ -25,6 +25,18 @@ export const {
     },
   },
   callbacks: {
+    async signIn({ user, account }) {
+      // Allow OAuth without email verification
+      if (account?.provider !== 'credentials') return true;
+
+      const existingUser = await getUserById(user.id);
+      // Prevent sign in without email verification
+      if (!existingUser?.emailVerified) return false;
+
+      // ToDo: ADD 2FA check
+
+      return true;
+    },
     async session({ token, session }) {
       console.log({
         sessionToken: token,
@@ -48,6 +60,6 @@ export const {
     },
   },
   adapter: PrismaAdapter(db),
-  session: { strategy: "jwt" },
+  session: { strategy: 'jwt' },
   ...authConfig,
 });
