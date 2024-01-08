@@ -44,7 +44,6 @@ const NewVerificationForm = () => {
     >
       <div className="flex items-center w-full justify-center">
         {!success && !error && <BeatLoader />}
-        <BeatLoader />
         <FormSuccess message={success} />
         {!success && <FormError message={error} />}
       </div>
