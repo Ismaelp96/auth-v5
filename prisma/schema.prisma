@@ -23,7 +23,7 @@ model User {
   role          UserRole @default(USER)
   accounts      Account[]
   isTwoFactorEnabled Boolean @default(false)
-  twoFactorConfirmation twoFactorConfirmation?
+  twoFactorConfirmation TwoFactorConfirmation?
 }
 
 model Account {
@@ -71,7 +71,7 @@ model TwoFactorToken {
   @@unique([email, token])
 }
 
-model twoFactorConfirmation {
+model TwoFactorConfirmation {
   id String @id @default(cuid())
 
   userId String
