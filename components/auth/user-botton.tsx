@@ -16,7 +16,7 @@ export const UserButton = () => {
   const user = useCurrentUser();
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
+      <DropdownMenuTrigger className='flex border-none'>
         <Avatar>
           <AvatarImage src={user?.image || ''} />
           <AvatarFallback className='bg-sky-500'>
@@ -26,7 +26,7 @@ export const UserButton = () => {
         <DropdownMenuTrigger>
           <DropdownMenuContent className='w-40' align='end'>
             <LogoutButton>
-              <DropdownMenuItem>
+              <DropdownMenuItem className='cursor-pointer'>
                 <RxExit className='h-4 w-4 mr-2' />
                 Logout
               </DropdownMenuItem>
