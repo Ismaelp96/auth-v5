@@ -24,6 +24,7 @@ import { login } from '@/actions/login';
 
 export const LoginForm = () => {
   const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get('callbackUrl');
   const urlError =
     searchParams.get('error') === 'OAuthAccountNotLinked'
       ? 'Email already in use with different provider!'
@@ -42,7 +43,7 @@ export const LoginForm = () => {
     setSuccess('');
 
     startTransition(() => {
-      login(values)
+      login(values, callbackUrl)
         .then((data) => {
           if (data?.error) {
             form.reset();
@@ -66,7 +67,8 @@ export const LoginForm = () => {
       headerLabel='Welcome back'
       backButtonLabel="Don't have an account?"
       backButtonHref='/auth/register'
-      showSocial>
+      showSocial
+    >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
           <div className='space-y-4'>
@@ -127,7 +129,8 @@ export const LoginForm = () => {
                         size='sm'
                         variant='link'
                         asChild
-                        className='px-0 font-normal'>
+                        className='px-0 font-normal'
+                      >
                         <Link href='/auth/reset'>Forgot password</Link>
                       </Button>
                       <FormMessage />
